@@ -114,9 +114,11 @@ gcloud run deploy $CLOUD_RUN_NAME \
     --region us-central1 \
     --allow-unauthenticated \
     --service-account $SA_EMAIL \
-    --set-env-vars POE_ACCESS_KEY=$PEO_ACCESS_KEY,PROJECT_ID=$PROJECT_ID,BUCKET_NAME=$BUCKET_NAME,LOCATION=us-central1
+    --set-env-vars POE_ACCESS_KEY=$PEO_ACCESS_KEY,PROJECT_ID=$PROJECT_ID,BUCKET_NAME=$BUCKET_NAME,LOCATION=us-central1 \
+    --concurrency 100 \
+    --timeout 180
 check_status "Cloud Run deployment"
 
 # Change to the desired directory before exiting the script
-cd imagen3_bot_for_poe
+
 echo "Setup completed successfully!"
