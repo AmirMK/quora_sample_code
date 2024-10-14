@@ -30,6 +30,16 @@ if [ -z "$PROJECT_ID" ] || [ -z "$PEO_ACCESS_KEY" ]; then
     usage
 fi
 
+# Enable necessary GCP APIs
+gcloud services enable aiplatform.googleapis.com
+check_status "Enabling Vertex AI API"
+
+gcloud services enable artifactregistry.googleapis.com
+check_status "Enabling Artifact Registry API"
+
+gcloud services enable run.googleapis.com
+check_status "Enabling Cloud Run API"
+
 # Create directory and move into it
 mkdir -p imagen3_bot_for_poe
 cd imagen3_bot_for_poe || exit
