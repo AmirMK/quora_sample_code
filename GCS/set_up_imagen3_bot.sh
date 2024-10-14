@@ -115,7 +115,7 @@ gcloud run deploy $CLOUD_RUN_NAME \
     --allow-unauthenticated \
     --service-account $SA_EMAIL \
     --set-env-vars POE_ACCESS_KEY=$PEO_ACCESS_KEY,PROJECT_ID=$PROJECT_ID,BUCKET_NAME=$BUCKET_NAME,LOCATION=us-central1 \
-    --concurrency 100 \
+    --concurrency 10 \
     --timeout 180
 check_status "Cloud Run deployment"
 
