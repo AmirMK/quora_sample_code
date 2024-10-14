@@ -1,0 +1,7 @@
+google-cloud-aiplatform==1.59.0
+fastapi-poe==0.0.36
+google.cloud
+imgurpython
+fastapi
+uvicorn
+Pillow
