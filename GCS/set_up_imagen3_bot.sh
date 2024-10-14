@@ -2,7 +2,7 @@
 
 # Function to display usage message
 usage() {
-    echo "Usage: $0 --project_id <project_id> --peo_access_key <peo_access_key>"
+    echo "Usage: $0 --project_id <project_id> --peo_access_key <peo_access_key> --bucket <bucket_name>"
     exit 1
 }
 
@@ -19,18 +19,27 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         --project_id) PROJECT_ID="$2"; shift ;;
         --peo_access_key) PEO_ACCESS_KEY="$2"; shift ;;
+        --bucket) BUCKET_NAME="$2"; shift ;;
         *) usage ;;
     esac
     shift
 done
 
-# Check if both arguments are provided
-if [ -z "$PROJECT_ID" ] || [ -z "$PEO_ACCESS_KEY" ]; then
-    echo "Error: PROJECT_ID and peo_access_key must be provided."
+# Check if required arguments are provided
+if [ -z "$PROJECT_ID" ] || [ -z "$PEO_ACCESS_KEY" ] || [ -z "$BUCKET_NAME" ]; then
+    echo "Error: PROJECT_ID, peo_access_key, and bucket_name must be provided."
     usage
 fi
 
 # Enable necessary GCP APIs
+gcloud services enable storage.googleapis.com
+check_status "Enabling Cloud Storage API"
+
+# Create Google Cloud Storage bucket
+gsutil mb -p $PROJECT_ID gs://$BUCKET_NAME/
+check_status "Creating Google Cloud Storage bucket"
+
+# Enable other necessary GCP APIs
 gcloud services enable aiplatform.googleapis.com
 check_status "Enabling Vertex AI API"
 
@@ -94,7 +103,7 @@ gcloud iam service-accounts add-iam-policy-binding $SA_EMAIL \
 check_status "Assigning serviceAccountTokenCreator IAM policy"
 
 # Set Cloud Run service name
-CLOUD_RUN_NAME="${PROJECT_ID}-image3-cloud-run"
+CLOUD_RUN_NAME="${PROJECT_ID}-image3-cloud-run-test"
 
 # Deploy Cloud Run service
 gcloud run deploy $CLOUD_RUN_NAME \
