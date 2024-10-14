@@ -41,6 +41,21 @@ check_status "Enabling Cloud Storage API"
 gsutil mb -p $PROJECT_ID gs://$BUCKET_NAME/
 check_status "Creating Google Cloud Storage bucket"
 
+# Set lifecycle rule to delete objects older than 1 day
+echo '{
+  "rule": [
+    {
+      "action": {
+        "type": "Delete"
+      },
+      "condition": {
+        "age": 1
+      }
+    }
+  ]
+}' | gsutil lifecycle set - gs://$BUCKET_NAME
+check_status "Setting lifecycle rule on bucket"
+
 # Enable other necessary GCP APIs
 gcloud services enable aiplatform.googleapis.com
 check_status "Enabling Vertex AI API"
@@ -119,6 +134,5 @@ gcloud run deploy $CLOUD_RUN_NAME \
     --timeout 180
 check_status "Cloud Run deployment"
 
-# Change to the desired directory before exiting the script
-
+# Finish setup
 echo "Setup completed successfully!"
