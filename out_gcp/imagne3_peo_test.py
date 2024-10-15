@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 project_id = os.getenv("PROJECT_ID")
 location = os.getenv("LOCATION")
 poe_access_key = os.getenv("POE_ACCESS_KEY")
-credentials, project = load_credentials_from_file('quora-438213-7d3f5b03e504.json')
+credentials, project = load_credentials_from_file('xxx.json')
 
 # Validate required environment variables
 if not project_id:
