@@ -42,6 +42,9 @@ gsutil mb -p $PROJECT_ID gs://$BUCKET_NAME/
 check_status "Creating Google Cloud Storage bucket"
 
 # Set lifecycle rule to delete objects older than 1 day
+LIFECYCLE_CONFIG="lifecycle.json"
+
+# Create the lifecycle config file
 echo '{
   "rule": [
     {
@@ -53,8 +56,12 @@ echo '{
       }
     }
   ]
-}' | gsutil lifecycle set - gs://$BUCKET_NAME
+}' > $LIFECYCLE_CONFIG
+
+# Apply the lifecycle rule using the temporary lifecycle.json file
+gsutil lifecycle set $LIFECYCLE_CONFIG gs://$BUCKET_NAME
 check_status "Setting lifecycle rule on bucket"
+
 
 # Enable other necessary GCP APIs
 gcloud services enable aiplatform.googleapis.com
